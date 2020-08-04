@@ -33,11 +33,19 @@ const Button = ({name, handleClick}) => {
 }
 
 const StatisticLine = ({text, value}) => {
-  if (text==='positive') {
-    return <p>{text} {value} %</p>
-  } else {
-    return <p>{text} {value}</p> 
-  }
+  const percentSign = text==='positive' ? '%' : ''
+  return (
+    <>
+      <table>
+        <tbody>
+          <tr>
+            <td width='100px'>{text}</td>
+            <td>{value} {percentSign}</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  )
 }
 
 const App = () => {
