@@ -12,10 +12,20 @@ const App = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    const personObject = {name: newName}
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    
+    const nameNotUnique = persons.find(person => 
+      person.name.toLowerCase() === newName.toLowerCase()
+    )
+
+    if (nameNotUnique) {
+      window.alert(`${newName} is already added to phonebook`)
+    } else {
+      const personObject = {name: newName}
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
+
 
   return (
     <div>
