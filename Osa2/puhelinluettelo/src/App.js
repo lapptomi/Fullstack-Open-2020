@@ -31,6 +31,7 @@ const App = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
+    
     const nameNotUnique = persons.find(person => 
       person.name.toLowerCase() === newName.toLowerCase())
 
@@ -40,7 +41,10 @@ const App = () => {
     }
 
     if (nameNotUnique) {
-      window.alert(`${newName} is already added to phonebook`)
+      const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one ?`)
+        if (confirmUpdate) {
+          updatePerson()
+        }
     } else {
       personService.create(personObject)
         .then(response => {
@@ -49,6 +53,26 @@ const App = () => {
           setNewNumber('')
         })
     }
+  }
+
+  const updatePerson = () => {
+    const personToUpdate = persons.find(p => 
+      p.name.toLowerCase() === newName.toLowerCase())
+
+    const updatedPerson = {
+      name: personToUpdate.name,
+      number: newNumber
+    }
+
+    personService
+      .update(personToUpdate.id, updatedPerson)
+      .then(() => {
+        personService.getAll().then(response => {
+          setPersons(response.data)
+          setNewName('')
+          setNewNumber('')
+        })
+      })
   }
 
   const deletePerson = (id) => {

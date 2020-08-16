@@ -17,10 +17,11 @@ const update = (id, personObect) => {
 const remove = (id) => {
   return axios.delete(`${baseUrl}/${id}`)
 }
+
  
 export default {
   getAll: getAll,
   create: create,
   update: update,
-  remove: remove
+  remove: remove,
 }

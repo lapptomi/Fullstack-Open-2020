@@ -10,7 +10,7 @@ const Person = ({person, handleDeletion}) => {
   return (
     <p>
       {person.name} {person.number}
-      <button onClick={() => confirmDeletion()}>
+      <button onClick={confirmDeletion}>
         delete
       </button>
     </p>
