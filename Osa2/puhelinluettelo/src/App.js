@@ -11,9 +11,11 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
 
+  const baseUrl = 'http://localhost:3001'
+
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get(`${baseUrl}/persons`)
       .then(response => setPersons(response.data))
   }, [])
 
@@ -29,22 +31,29 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const addPerson = () => {
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+    axios.post(`${baseUrl}/persons`, personObject)
+      .then(response => {
+        //console.log(response.data)
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+  }
+
   const handleFormSubmit = (event) => {
     event.preventDefault()
     const nameNotUnique = persons.find(person => 
-      person.name.toLowerCase() === newName.toLowerCase()
-    )
+      person.name.toLowerCase() === newName.toLowerCase())
 
     if (nameNotUnique) {
       window.alert(`${newName} is already added to phonebook`)
     } else {
-      const personObject = {
-        name: newName, 
-        number: newNumber
-      }
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      addPerson()
     }
   }
 
