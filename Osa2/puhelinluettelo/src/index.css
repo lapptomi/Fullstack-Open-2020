@@ -20,6 +20,17 @@
   margin-bottom: 10px;
 }
 
+.error {
+  max-width: 300px;
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 .updatePerson {
   max-width: 300px;
   color: blueviolet;

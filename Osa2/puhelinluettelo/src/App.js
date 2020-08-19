@@ -88,6 +88,10 @@ const App = () => {
           showTempNotification('updatePerson', `Updated number of ${personToUpdate.name}`)
         })
       })
+      .catch(error => {
+        showTempNotification('error' ,`Person ${personToUpdate.name} has already been removed from server`)
+        setPersons(persons.filter(p => p.id !== personToUpdate.id))
+      })
   }
 
   const deletePerson = (id) => {
