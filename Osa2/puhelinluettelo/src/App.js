@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [notificationOperation, setNotificationOperation] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState('')
 
 
   useEffect(() => {
@@ -29,9 +32,18 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const showTempNotification = (operation, message) => {
+    setNotificationOperation(operation)
+    setNotificationMessage(message)
+    setTimeout(() => {
+      setNotificationOperation(null)
+      setNotificationMessage('')
+    }, 3000)
+  }
+  
+
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    
     const nameNotUnique = persons.find(person => 
       person.name.toLowerCase() === newName.toLowerCase())
 
@@ -39,16 +51,19 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-
     if (nameNotUnique) {
-      const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one ?`)
-        if (confirmUpdate) {
-          updatePerson()
-        }
+      const confirmUpdate = (
+        window.confirm(`${newName} is already added to phonebook, `
+        + 'replace the old number with a new one?')
+      )
+      if (confirmUpdate) {
+        updatePerson()
+      }
     } else {
       personService.create(personObject)
         .then(response => {
           setPersons(persons.concat(response.data))
+          showTempNotification('addPerson', `Added ${personObject.name}`)
           setNewName('')
           setNewNumber('')
         })
@@ -63,7 +78,6 @@ const App = () => {
       name: personToUpdate.name,
       number: newNumber
     }
-
     personService
       .update(personToUpdate.id, updatedPerson)
       .then(() => {
@@ -71,26 +85,33 @@ const App = () => {
           setPersons(response.data)
           setNewName('')
           setNewNumber('')
+          showTempNotification('updatePerson', `Updated number of ${personToUpdate.name}`)
         })
       })
   }
 
   const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id)
     personService
       .remove(id)
       .then(() => {
         setPersons(persons.filter(p => p.id !== id))
+        showTempNotification('deletePerson', `Deleted ${person.name}`)
       })
   }
 
   const filteredPersons = persons.filter(person => {
-   return person.name.toLowerCase().includes(nameFilter.toLowerCase())
+    return person.name.toLowerCase().includes(nameFilter.toLowerCase())
   })
 
 
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification
+        operation={notificationOperation}
+        message={notificationMessage}
+      />
         <Filter 
           nameFilter={nameFilter} 
           handleChange={handleFilterChange} 
