@@ -27,7 +27,7 @@ app.get('/api/persons', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if ((body.name === undefined || body.number === undefined)) {
+  if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({error: 'content missing'})
   }
 
@@ -36,9 +36,9 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
 
-	person.save().then(savedPerson => {
-		response.json(savedPerson)
-	})
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
