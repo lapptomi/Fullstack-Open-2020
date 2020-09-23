@@ -11,20 +11,25 @@ app.use(morgan('tiny'))
 app.use(express.static('build'))
 
 
-app.get('/api/info', (request, response) => {
-  const personCount = persons.length
-  response.write(`Phonebook has info for ${0} people \n`)
-  response.write(Date())
-  response.end()
+app.get('/api/info', (request, response, next) => {
+  Person.find({})
+    .then(people => {
+      response.write(`Phonebook has info for ${people.length} people \n`)
+      response.write(Date())
+      response.end()
+    })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(people => {
-    response.json(people)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(people => {
+      response.json(people)
+    })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (body.name === undefined || body.number === undefined) {
@@ -36,9 +41,11 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson)
+  person.save()
+    .then(savedPerson => {
+      response.json(savedPerson)
   })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -49,15 +56,37 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(p => p.id === id)
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+    //const id = Number(request.params.id)
+    // const person = persons.find(p => p.id === id)
+    Person.findById(request.params.id)
+      .then(person => {
+        if (person) {
+          response.json(person.toJSON())
+        } else {
+          response.status(404).end()
+        }
+      })
+      .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({error: 'unknown endpoint'})
+}
+app.use(unknownEndpoint)
+
+const errorHandler= (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return response.status(400).send({error: 'Malformatted id'})
+  } else if (error.name === 'SyntaxError') {
+    return response.status(400).send({error: 'Syntax error'})
+  }
+
+  next(error)
+}
+app.use(errorHandler)
 
 
 const PORT = process.env.PORT
