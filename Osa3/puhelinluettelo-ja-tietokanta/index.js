@@ -4,7 +4,6 @@ const app = express()
 const cors = require('cors')
 const morgan = require('morgan')
 const Person = require('./models/person')
-const { response } = require('express')
 
 app.use(cors())
 app.use(express.json())
@@ -96,6 +95,8 @@ const errorHandler= (error, request, response, next) => {
     return response.status(400).send({error: 'Malformatted id'})
   } else if (error.name === 'SyntaxError') {
     return response.status(400).send({error: 'Syntax error'})
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({error: error.message})
   }
 
   next(error)
