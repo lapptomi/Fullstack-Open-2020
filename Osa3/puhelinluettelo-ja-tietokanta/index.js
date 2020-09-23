@@ -33,7 +33,7 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (body.name === undefined || body.number === undefined) {
-    return response.status(400).json({error: 'content missing'})
+    return response.status(400).json({ error: 'content missing' })
   }
 
   const person = new Person ({
@@ -44,13 +44,13 @@ app.post('/api/persons', (request, response, next) => {
   person.save()
     .then(savedPerson => {
       response.json(savedPerson)
-  })
+    })
     .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -70,13 +70,17 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  
+
   const person = {
     name: body.name,
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, {new: true})
+  if (person.name.length < 3 || person.number.length < 8) {
+    return response.status(400).send({ error: 'Name or numebr too short' })
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
@@ -84,19 +88,19 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({error: 'unknown endpoint'})
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
 
-const errorHandler= (error, request, response, next) => {
+const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
-  if (error.name === 'CastError' && error.kind == 'ObjectId') {
-    return response.status(400).send({error: 'Malformatted id'})
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'Malformatted id' })
   } else if (error.name === 'SyntaxError') {
-    return response.status(400).send({error: 'Syntax error'})
+    return response.status(400).send({ error: 'Syntax error' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({error: error.message})
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
