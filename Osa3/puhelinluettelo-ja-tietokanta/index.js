@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const morgan = require('morgan')
 const Person = require('./models/person')
+const { response } = require('express')
 
 app.use(cors())
 app.use(express.json())
@@ -57,8 +58,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    //const id = Number(request.params.id)
-    // const person = persons.find(p => p.id === id)
     Person.findById(request.params.id)
       .then(person => {
         if (person) {
@@ -68,6 +67,21 @@ app.get('/api/persons/:id', (request, response, next) => {
         }
       })
       .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
