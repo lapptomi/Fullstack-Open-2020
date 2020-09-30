@@ -53,6 +53,31 @@ describe('blogs from database', () => {
   })
 })
 
+describe('blogs to database', () => {
+  test('can be added with POST request', async () => {
+    const response = await api.get('/api/blogs')
+    const blogsLengthBefore = response.body.length
+
+    const blogObject3 = {
+      title: "TestTitle3",
+      author: "TestAuthor3",
+      url: "TestUrl3",
+      likes: 1
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogObject3)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const responseAfterPostRequest = await api.get('/api/blogs')
+    const blogsLengthAfter = responseAfterPostRequest.body.length
+    expect(blogsLengthBefore).toEqual(2)
+    expect(blogsLengthBefore+1).toEqual(blogsLengthAfter)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
