@@ -76,6 +76,23 @@ describe('blogs to database', () => {
     expect(blogsLengthBefore).toEqual(2)
     expect(blogsLengthBefore+1).toEqual(blogsLengthAfter)
   })
+
+  test('without likes field is set to zero by default', async () => {
+    const blogWithoutLikes = {
+      title: "TestTitle4",
+      author: "TestAuthor4",
+      url: "TestUrl4",
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogWithoutLikes)
+      .expect(201)
+
+    const addedBlog = await Blog.findOne({ title: "TestTitle4" })
+    expect(addedBlog.likes).toEqual(0)
+    expect(addedBlog.title).toBe('TestTitle4')
+  })
 })
 
 afterAll(() => {
