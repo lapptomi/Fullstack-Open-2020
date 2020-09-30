@@ -30,7 +30,7 @@ beforeEach(async () => {
 
 
 describe('blogs from database', () => {
-  test('are returned as json', async () => {
+  test('are returned as JSON', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
@@ -92,6 +92,36 @@ describe('blogs to database', () => {
     const addedBlog = await Blog.findOne({ title: "TestTitle4" })
     expect(addedBlog.likes).toEqual(0)
     expect(addedBlog.title).toBe('TestTitle4')
+  })
+
+  test('without title and / or url is not added', async() => {
+    const unvalidBlog = {
+      author: "TestAuthor5",
+      likes: 5
+    }
+    const unvalidBlog2 = {
+      author: "TestAuthor5",
+      title: "TestTitle",
+      likes: 5
+    }
+    const unvalidBlog3 = {
+      author: "TestAuthor5",
+      url: "TestUrl",
+      likes: 5
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(unvalidBlog)
+      .expect(400)
+    await api
+      .post('/api/blogs')
+      .send(unvalidBlog2)
+      .expect(400)
+    await api
+      .post('/api/blogs')
+      .send(unvalidBlog3)
+      .expect(400)
   })
 })
 
