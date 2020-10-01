@@ -7,8 +7,27 @@ usersRouter.get('/', async (request, response) => {
   response.json(users.map(u => u.toJSON()))
 })
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
   const body = request.body
+
+  const validPassword = body.password !== undefined
+    ? body.password
+    : false
+  const validUsername = body.username !== undefined
+    ? body.username
+    : false
+
+  
+  if (!validPassword || !validUsername) {
+    return response.status(400).send({
+      error: 'unvalid username or password'
+    })
+  }
+  if (body.password.length < 3 || body.username.length < 3) {
+    return response.status(400).send({
+      error: 'password or username is too short'
+    }) 
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
@@ -19,9 +38,12 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
-
-  response.json(savedUser)
+  try {
+    const savedUser = await user.save()
+    response.json(savedUser)
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = usersRouter
