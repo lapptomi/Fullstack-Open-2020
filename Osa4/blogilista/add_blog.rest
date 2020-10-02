@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
-Content-Type: application/json
-Authorization: bearer ...
+content-type: application/json
+authorization: bearer ...
 
 {
-  "title": "Test title2",
+  "title": "Test title4",
   "author": "Test author",
   "url": "Test url",
   "likes": 11
