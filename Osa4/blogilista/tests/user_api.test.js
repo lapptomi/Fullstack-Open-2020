@@ -37,10 +37,12 @@ test('Users with unvalid values are not added to DB', async () => {
     .post('/api/users')
     .send(users[1])
     .expect(400)
+
   await api
     .post('/api/users')
     .send(users[2])
     .expect(400)
+    
   await api
     .post('/api/users')
     .send(users[0])

@@ -1,24 +1,45 @@
 
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const logger = require('../utils/logger')
 
-blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then(blogs => {
-      response.json(blogs)
-    })
+blogsRouter.get('/', async (request, response, next) => {
+  const blogs = await Blog.find({}).populate('user', {blogs: 0})
+  response.json(blogs.map(b => b.toJSON()))
 })
 
-blogsRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body)
+blogsRouter.post('/', async (request, response, next) => {
+  const body = request.body
+
+  const user = await User.findById(body.userId)
+
+  const blog = new Blog ({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    user: user
+  })
+
   if (!blog.likes) blog.likes = 0
   if (!(blog.title && blog.url)) {
     return response.status(400).end()
   }
-  
-  blog.save().then(result => {
-      response.status(201).json(result)
+  if (!blog.user) {
+    return response.status(400).send({
+      error: 'user not found'
     })
+  }
+
+  try {
+    const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+    response.json(savedBlog.toJSON())
+  } catch (error) {
+    next(error)
+  }
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
@@ -26,7 +47,9 @@ blogsRouter.delete('/:id', async (request, response, next) => {
     await Blog.findByIdAndDelete(request.params.id)
     return response.status(204).end()
   } catch (error) {
-    next(error)
+    return response.status(400).send({
+      error: 'user not found'
+    })
   }
 })
 
