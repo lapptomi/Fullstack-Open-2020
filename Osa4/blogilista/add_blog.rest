@@ -3,8 +3,8 @@ content-type: application/json
 authorization: bearer ...
 
 {
-  "title": "Test title4",
+  "title": "User1Blog",
   "author": "Test author",
   "url": "Test url",
-  "likes": 11
+  "likes": 999
 }
