@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,12 +13,18 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
+  const [notificationOperation, setNotificationOperation] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState('')
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )  
+    const fetchBlogs = async () => {
+      const result = await blogService.getAll()
+      setBlogs(result)
+    }
+    fetchBlogs()
   }, [])
 
   useEffect(() => {
@@ -26,6 +35,15 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const showTempNotification = (operation, message) => {
+    setNotificationOperation(operation)
+    setNotificationMessage(message)
+    setTimeout(() => {
+      setNotificationOperation(null)
+      setNotificationMessage('')
+    }, 3000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -43,7 +61,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exeption) {
-      window.alert('Wrong username or password')
+      showTempNotification('loginError', 'Wrong username or password')
     }
   }
 
@@ -52,15 +70,54 @@ const App = () => {
     setUser(null)
   }
 
+  const handleSubmitBlog = async (event) => {
+    event.preventDefault()
+
+    const newBlogObject = {
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl
+    }
+    
+    try {
+      const newBlog = await blogService.create(newBlogObject)
+      setBlogs(blogs.concat(newBlog))
+  
+      setBlogTitle('')
+      setBlogAuthor('')
+      setBlogUrl('')
+  
+      showTempNotification('blogAdded', 
+        `a new blog ${newBlog.title} by ${newBlog.author} added`
+      )
+    } catch (error) {
+      showTempNotification('error', 'Error adding blog')
+    }
+  }
+
+  const handleTitleChange = (event) => {
+    setBlogTitle(event.target.value)
+  }
+  const handleAuthorChange = (event) => {
+    setBlogAuthor(event.target.value)
+  }
+  const handleUrlChange = (event) => {
+    setBlogUrl(event.target.value)
+  }
+
 
   if (user === null) {
     return (
       <div>
+        <Notification
+          operation={notificationOperation}
+          message={notificationMessage}
+        />
         <h2>Log in to application</h2>
         <form onSubmit={handleLogin}>
           <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -69,7 +126,7 @@ const App = () => {
           </div>
           <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
@@ -84,13 +141,27 @@ const App = () => {
 
   return (
     <div>
+      <Notification
+        operation={notificationOperation}
+        message={notificationMessage}
+      />
       <h2>blogs</h2>
       <p>
         {user.name} logged in
         <button onClick={handleLogout}>
           logout
         </button>
-      </p>      
+      </p>
+      <h1>create new</h1>
+        <BlogForm 
+          blogTitle={blogTitle}
+          blogAuthor={blogAuthor}
+          blogUrl={blogUrl}
+          handleSubmitBlog={handleSubmitBlog}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+        />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
