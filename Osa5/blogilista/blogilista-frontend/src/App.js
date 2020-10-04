@@ -99,6 +99,20 @@ const App = () => {
     }
   }
 
+  const deleteBlog = ({blog}) => {
+    try {
+      if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+        blogService.remove(blog.id)
+          .then(() => {
+            const updatedBlogs = blogs.filter(b => b.id !== blog.id)
+            setBlogs(updatedBlogs)
+          })
+        }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   if (user === null) {
     return (
@@ -151,7 +165,12 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLikeButtonClick={addLike}/>
+        <Blog 
+          key={blog.id} 
+          blog={blog} 
+          handleLikeButtonClick={addLike}
+          handleBlogDelete={deleteBlog}
+        />
       )}
     </div>
   )

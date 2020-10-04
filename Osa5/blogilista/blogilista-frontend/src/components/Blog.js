@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-const Blog = ({blog, handleLikeButtonClick}) => {
+const Blog = ({blog, handleLikeButtonClick, handleBlogDelete}) => {
   const [visible, setVisible] = useState(false)
-
+  
   const handleVisibility = () => {
     setVisible(!visible)
   }
@@ -16,9 +16,19 @@ const Blog = ({blog, handleLikeButtonClick}) => {
     background: 'rgba(76, 175, 80, 0.20)',
   }
 
-  const addLike = (event) => {
+  const addLike = () => {
     handleLikeButtonClick({blog: blog})
   }
+
+  const deleteBlog = () => {
+    handleBlogDelete({blog: blog})
+  }
+
+  const loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
+
+  const removeButtonIsVisible = loggedUser.username === blog.user.username
+    ? {display: ''}
+    : {display: 'none'}
 
 
   if (visible) {
@@ -36,7 +46,10 @@ const Blog = ({blog, handleLikeButtonClick}) => {
             like
           </button>
         </div>
-        <p>{blog.author}</p>
+          <p>{blog.author}</p>
+        <button onClick={deleteBlog} style={removeButtonIsVisible}>
+          remove
+        </button>
     </div>
     )
   }
