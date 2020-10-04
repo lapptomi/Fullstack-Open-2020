@@ -22,6 +22,7 @@ const App = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       const result = await blogService.getAll()
+      result.sort((a, b) => a.likes - b.likes).reverse()
       setBlogs(result)
     }
     fetchBlogs()
@@ -90,6 +91,7 @@ const App = () => {
       blogService.addLike(blog)
         .then(() => {
           const updatedBlogs = [...blogs]
+          updatedBlogs.sort((a, b) => a.likes - b.likes).reverse()
           setBlogs(updatedBlogs)
         })
     } catch (error) {
