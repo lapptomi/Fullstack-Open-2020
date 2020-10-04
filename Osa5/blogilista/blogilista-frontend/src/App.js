@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -13,11 +14,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
   const [notificationOperation, setNotificationOperation] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState('')
+
+  const blogRef = useRef()
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -70,40 +70,20 @@ const App = () => {
     setUser(null)
   }
 
-  const handleSubmitBlog = async (event) => {
-    event.preventDefault()
-
-    const newBlogObject = {
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl
-    }
+  const addBlog = async (newBlogObject) => {
+    const title = newBlogObject.title
+    const author = newBlogObject.author
     
     try {
       const newBlog = await blogService.create(newBlogObject)
       setBlogs(blogs.concat(newBlog))
-  
-      setBlogTitle('')
-      setBlogAuthor('')
-      setBlogUrl('')
-  
-      showTempNotification('blogAdded', 
-        `a new blog ${newBlog.title} by ${newBlog.author} added`
-      )
+      blogRef.current.toggleVisibility()
+      showTempNotification('blogAdded', `a new blog ${title} by ${author} added`)
     } catch (error) {
       showTempNotification('error', 'Error adding blog')
     }
   }
 
-  const handleTitleChange = (event) => {
-    setBlogTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setBlogAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setBlogUrl(event.target.value)
-  }
 
 
   if (user === null) {
@@ -152,16 +132,10 @@ const App = () => {
           logout
         </button>
       </p>
-      <h1>create new</h1>
-        <BlogForm 
-          blogTitle={blogTitle}
-          blogAuthor={blogAuthor}
-          blogUrl={blogUrl}
-          handleSubmitBlog={handleSubmitBlog}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
-        />
+      <Togglable buttonLabel="new blog" ref={blogRef}>
+        <h1>create new</h1>
+        <BlogForm createBlog={addBlog} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
