@@ -84,6 +84,18 @@ const App = () => {
     }
   }
 
+  const addLike = ({blog}) => {
+    try {
+      blog.likes+=1
+      blogService.addLike(blog)
+        .then(() => {
+          const updatedBlogs = [...blogs]
+          setBlogs(updatedBlogs)
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   if (user === null) {
@@ -137,7 +149,7 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLikeButtonClick={addLike}/>
       )}
     </div>
   )

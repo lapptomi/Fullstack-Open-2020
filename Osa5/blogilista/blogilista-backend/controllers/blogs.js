@@ -88,6 +88,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
     if (!blog) return response.status(404).end()
 
     const updatedBlog = {
+      id: body.id,
       title: !body.title ? blog.title : body.title,
       author: !body.author ? blog.author : body.author,
       url: !body.url ? blog.url : body.url,

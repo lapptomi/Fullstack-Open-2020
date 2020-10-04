@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({blog}) => {
+const Blog = ({blog, handleLikeButtonClick}) => {
   const [visible, setVisible] = useState(false)
 
   const handleVisibility = () => {
@@ -16,6 +16,11 @@ const Blog = ({blog}) => {
     background: 'rgba(76, 175, 80, 0.20)',
   }
 
+  const addLike = (event) => {
+    handleLikeButtonClick({blog: blog})
+  }
+
+
   if (visible) {
     return (
       <div style={blogStyle}>
@@ -27,14 +32,14 @@ const Blog = ({blog}) => {
         <p>{blog.url}</p>
         <div> 
           likes {blog.likes}
-          <button onClick={() => console.log('Liked')}>
+          <button onClick={addLike}>
             like
           </button>
         </div>
         <p>{blog.author}</p>
     </div>
     )
-  } 
+  }
 
   return (
     <div style={blogStyle}>
