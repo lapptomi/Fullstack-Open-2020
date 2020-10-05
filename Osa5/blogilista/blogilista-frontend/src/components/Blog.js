@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-const Blog = ({blog, handleLikeButtonClick, handleBlogDelete}) => {
+const Blog = ({ blog, handleLikeButtonClick, handleBlogDelete }) => {
   const [visible, setVisible] = useState(false)
-  
+
   const handleVisibility = () => {
     setVisible(!visible)
   }
@@ -17,40 +17,40 @@ const Blog = ({blog, handleLikeButtonClick, handleBlogDelete}) => {
   }
 
   const addLike = () => {
-    handleLikeButtonClick({blog: blog})
+    handleLikeButtonClick({ blog: blog })
   }
 
   const deleteBlog = () => {
-    handleBlogDelete({blog: blog})
+    handleBlogDelete({ blog: blog })
   }
 
   const loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
 
-  const removeButtonIsVisible = loggedUser.username === blog.user.username
-    ? {display: ''}
-    : {display: 'none'}
+  const removeButtonIsVisible =  loggedUser.username === blog.user.username
+    ? { display: '' }
+    : { display: 'none' }
 
 
   if (visible) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} >
         <div> {blog.title}
           <button onClick={handleVisibility}>
             hide
           </button>
         </div>
         <p>{blog.url}</p>
-        <div> 
+        <div>
           likes {blog.likes}
           <button onClick={addLike}>
             like
           </button>
         </div>
-          <p>{blog.author}</p>
+        <p>{blog.author}</p>
         <button onClick={deleteBlog} style={removeButtonIsVisible}>
           remove
         </button>
-    </div>
+      </div>
     )
   }
 
@@ -61,7 +61,7 @@ const Blog = ({blog, handleLikeButtonClick, handleBlogDelete}) => {
         view
       </button>
     </div>
-)}
+  )}
 
 
 export default Blog
