@@ -29,10 +29,6 @@ const Blog = ({
   }
 
 
-  
-  
-
-
   if (visible) {
     return (
       <div style={blogStyle} >
