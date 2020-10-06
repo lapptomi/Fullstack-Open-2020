@@ -6,6 +6,7 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
 
 
 const App = () => {
@@ -114,36 +115,23 @@ const App = () => {
   }
 
 
+
   if (user === null) {
     return (
-      <div>
+      <>
         <Notification
           operation={notificationOperation}
           message={notificationMessage}
         />
-        <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-          username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-          password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
+        <LoginForm
+          notificationMessage={notificationMessage}
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={({ target }) => setUsername(target.value)}
+          password={password}
+          setPassword={({ target }) => setPassword(target.value)}
+        />
+      </>
     )
   }
 
