@@ -108,6 +108,7 @@ const App = () => {
             const updatedBlogs = blogs.filter(b => b.id !== blog.id)
             setBlogs(updatedBlogs)
           })
+          showTempNotification('blogDeleted', `blog ${blog.title} by ${blog.author} deleted`)
       }
     } catch (error) {
       console.log(error)
