@@ -12,6 +12,18 @@ const App = () => {
     }
   }
 
+  const addVote = (event) => {
+    event.preventDefault()
+    const content = event.target.vote.value
+    event.target.vote.value = ''
+    dispatch({
+      type: 'NEW_VOTE',
+      data: {
+        content
+      }
+    })
+  }
+
   const vote = (id) => {
     console.log('vote', id)
     dispatch(addVoteTo(id))
@@ -32,9 +44,9 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={addVote}>
+        <div><input name='vote'/></div>
+        <button type="submit">create</button>
       </form>
     </div>
   )
