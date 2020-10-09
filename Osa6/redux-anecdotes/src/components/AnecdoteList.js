@@ -42,11 +42,16 @@ const AnecdoteList = () => {
     setTempNotification(`You voted: ${anecdote.content}`)
   }
   
+  const filter = useSelector(state => state.filter).toLowerCase()
+  const filteredAnecdotes = anecdotes.filter(a => 
+    a.content.toLowerCase().includes(filter)
+  )
+  
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {filteredAnecdotes.map(anecdote =>
         <Anecdote 
           key={anecdote.id}
           anecdote={anecdote}
