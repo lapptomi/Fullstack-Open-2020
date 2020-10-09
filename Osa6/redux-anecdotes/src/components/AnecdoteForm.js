@@ -5,6 +5,7 @@ import { createVote, } from '../reducers/anecdoteReducer'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
+  
   const addVote = (event) => {
     event.preventDefault()
     const content = event.target.vote.value
