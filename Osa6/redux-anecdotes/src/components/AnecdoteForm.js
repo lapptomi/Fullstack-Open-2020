@@ -1,13 +1,15 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { createVote, } from '../reducers/anecdoteReducer'
+import { createAnecdote, } from '../reducers/anecdoteReducer'
 import { hideTempNotification, voteCreatedNotification } from '../reducers/notificationReducer'
+import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
-  const createNewVote = (content) => {
-    dispatch(createVote(content))
+  const createNewAnecdote = async (content) => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch(createAnecdote(newAnecdote))
   }
 
   const setTempNotification = (content) => {
@@ -20,9 +22,9 @@ const AnecdoteForm = () => {
   const handleButtonClick = (event) => {
     event.preventDefault()
     const content = event.target.vote.value
-
-    createNewVote(content)
-    setTempNotification(`You created vote: ${content}`)
+    event.target.vote.value = ''
+    createNewAnecdote(content)
+    setTempNotification(`You created new anecdote: ${content}`)
   }
 
   

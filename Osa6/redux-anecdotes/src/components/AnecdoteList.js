@@ -25,7 +25,7 @@ const AnecdoteList = () => {
   anecdotes.sort((a, b) => a.votes - b.votes).reverse()
   const dispatch = useDispatch()
   
-  const vote = (id) => {
+  const addVote = (id) => {
     console.log('vote', id)
     dispatch(addVoteTo(id))
   }
@@ -38,9 +38,10 @@ const AnecdoteList = () => {
   }
 
   const handleClick = (anecdote) => {
-    vote(anecdote.id)
+    addVote(anecdote.id)
     setTempNotification(`You voted: ${anecdote.content}`)
   }
+  
   
   const filter = useSelector(state => state.filter).toLowerCase()
   const filteredAnecdotes = anecdotes.filter(a => 
