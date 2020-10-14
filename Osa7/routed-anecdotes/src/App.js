@@ -82,6 +82,13 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
+  const handleReset = (event) => {
+    event.preventDefault()
+    content.resetValue()
+    author.resetValue()
+    info.resetValue()
+  }
+
   return (
     <Route>
     <div>
@@ -112,6 +119,7 @@ const CreateNew = (props) => {
           />
         </div> 
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
     </Route>
