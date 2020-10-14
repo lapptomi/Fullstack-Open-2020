@@ -65,9 +65,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('')
-  const author = useField('')
-  const info = useField('')
+  const { resetValue: resetContent, ...content } = useField('')
+  const { resetValue: resetAuthor, ...author } = useField('')
+  const { resetValue: resetInfo, ...info } = useField('')
 
   const history = useHistory()
 
@@ -83,45 +83,25 @@ const CreateNew = (props) => {
   }
 
   const handleReset = (event) => {
-    event.preventDefault()
-    content.resetValue()
-    author.resetValue()
-    info.resetValue()
+    event.preventDefault()    
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
+
 
   return (
     <Route>
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-        content
-          <input 
-            name='content' 
-            value={content.value} 
-            onChange={content.onChange} 
-          />
-        </div>
-        <div>
-        author
-          <input 
-            name='author' 
-            value={author.value} 
-            onChange={author.onChange} 
-          />
-        </div>
-        <div>
-        url for more info
-          <input 
-            name='info' 
-            value={info.value} 
-            onChange={info.onChange} 
-          />
-        </div> 
-        <button>create</button>
-        <button onClick={handleReset}>reset</button>
-      </form>
-    </div>
+      <div>
+        <h2>create a new anecdote</h2>
+        <form onSubmit={handleSubmit}>
+          <div>content<input {...content}/></div>
+          <div>author<input {...author}/></div>
+          <div>url for more info<input {...info}/></div> 
+          <button>create</button>
+          <button onClick={handleReset}>reset</button>
+        </form>
+      </div>
     </Route>
   )
 }
