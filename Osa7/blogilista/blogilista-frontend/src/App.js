@@ -8,12 +8,13 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import { useDispatch, useSelector } from 'react-redux'
-import { hideNotification, setNotification } from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
 import { createBlog, initializeBlogs,  } from './reducers/blogReducer'
 
 
 const App = () => {
   const dispatch = useDispatch()
+  const blogRef = useRef()
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -26,14 +27,9 @@ const App = () => {
 
   const [user, setUser] = useState(null)
 
-  const showTempNotification = (operation, message) => {
+  const showNotification = (operation, message) => {
     dispatch(setNotification(operation, message))
-    setTimeout(() => {
-      dispatch(hideNotification())
-    }, 3000)
   }
-
-  const blogRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -61,7 +57,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (exeption) {
-      showTempNotification('error', 'Wrong username or password')
+      showNotification('error', 'Wrong username or password')
     }
   }
 
@@ -73,47 +69,14 @@ const App = () => {
   const addBlog = async (newBlogObject) => {
     const title = newBlogObject.title
     const author = newBlogObject.author
-
     try {
       dispatch(createBlog(newBlogObject))
       blogRef.current.toggleVisibility()
-      showTempNotification('blogAdded', `a new blog ${title} by ${author} added`)
+      showNotification('success', `a new blog ${title} by ${author} added`)
     } catch (error) {
-      showTempNotification('error', 'Error adding blog')
+      showNotification('error', 'Error adding blog')
     }
   }
-  /*
-  const addLike = ({ blog }) => {
-    try {
-      blog.likes+=1
-      blogService
-        .addLike(blog)
-        .then(() => {
-          const updatedBlogs = [...blogs]
-          updatedBlogs.sort((a, b) => a.likes - b.likes).reverse()
-          setBlogs(updatedBlogs)
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const deleteBlog = ({ blog }) => {
-    try {
-      if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-        blogService
-          .remove(blog.id)
-          .then(() => {
-            const updatedBlogs = blogs.filter(b => b.id !== blog.id)
-            setBlogs(updatedBlogs)
-          })
-        showTempNotification('blogDeleted', `blog ${blog.title} by ${blog.author} deleted`)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-*/
 
   if (user === null) {
     return (
@@ -139,14 +102,6 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
-      /*
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLikeButtonClick={addLike}
-          handleBlogDelete={deleteBlog}
-        />
-        */
         <Blog
           key={blog.id}
           blog={blog}

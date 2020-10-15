@@ -1,7 +1,14 @@
+
 export const setNotification = (operation, message) => {
-  return {
-    type: 'SET_NOTIFICATION',
-    data: { operation, message }
+
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data: { operation, message }
+    })
+    setTimeout(() => {
+      dispatch(hideNotification())
+    }, 3000)
   }
 }
 

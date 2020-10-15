@@ -15,10 +15,10 @@ const create = async (newBlogObject) => {
   return response.data
 }
 
-const addLike = (blogToUpdate) => {
-  const blogId = blogToUpdate.id
-  const response = axios.put(`${baseUrl}/${blogId}`, blogToUpdate)
-  return response.then(response => response.data)
+const addLike = async (blog) => {
+  blog.likes+=1
+  const request = await axios.put(`${baseUrl}/${blog.id}`, blog)
+  return request.data
 }
 
 const getAll = () => {

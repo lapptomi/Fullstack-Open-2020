@@ -1,5 +1,16 @@
 import blogService from '../services/blogs'
+import { setNotification } from '../reducers/notificationReducer'
 
+
+export const addLikeTo = (blog) => {
+  return async dispatch => {
+    const result = await blogService.addLike(blog)
+    dispatch({
+      type: 'LIKE_BLOG',
+      data: result
+    })
+  }
+}
 
 export const createBlog = (content) => {
   if (!(content.title && content.url && content.author)) {
@@ -24,6 +35,20 @@ export const initializeBlogs = () => {
   }
 }
 
+export const deleteBlog = (blog) => {
+  const id = blog.id
+  return async (dispatch) => {
+    await blogService.remove(blog.id)
+    dispatch({
+      type: 'DELETE_BLOG',
+      data: { id }
+    })
+    dispatch(setNotification('success',
+      `blog ${blog.title} by ${blog.author} deleted`)
+    )
+  }
+}
+
 
 const reducer = (state = [], action) => {
   console.log(action.type)
@@ -32,6 +57,10 @@ const reducer = (state = [], action) => {
     return action.data
   case 'NEW_BLOG':
     return [...state, action.data]
+  case 'DELETE_BLOG':
+    return [...state].filter(b => b.id !== action.data.id)
+  case 'LIKE_BLOG':
+    return [...state]
   default:
     return state
   }
