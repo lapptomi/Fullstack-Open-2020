@@ -9,13 +9,21 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideNotification, setNotification } from './reducers/notificationReducer'
+import { createBlog, initializeBlogs,  } from './reducers/blogReducer'
 
 
 const App = () => {
   const dispatch = useDispatch()
-  const notification = useSelector(state => state.notification[0])
 
-  const [blogs, setBlogs] = useState([])
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+  const notification = useSelector(state => state.notification[0])
+  const blogs = useSelector(state =>
+    state.blogs.sort((a, b) => a.likes - b.likes).reverse()
+  )
+
   const [user, setUser] = useState(null)
 
   const showTempNotification = (operation, message) => {
@@ -26,15 +34,6 @@ const App = () => {
   }
 
   const blogRef = useRef()
-
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const result = await blogService.getAll()
-      result.sort((a, b) => a.likes - b.likes).reverse()
-      setBlogs(result)
-    }
-    fetchBlogs()
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -76,15 +75,14 @@ const App = () => {
     const author = newBlogObject.author
 
     try {
-      const newBlog = await blogService.create(newBlogObject)
-      setBlogs(blogs.concat(newBlog))
+      dispatch(createBlog(newBlogObject))
       blogRef.current.toggleVisibility()
       showTempNotification('blogAdded', `a new blog ${title} by ${author} added`)
     } catch (error) {
       showTempNotification('error', 'Error adding blog')
     }
   }
-
+  /*
   const addLike = ({ blog }) => {
     try {
       blog.likes+=1
@@ -115,7 +113,7 @@ const App = () => {
       console.log(error)
     }
   }
-
+*/
 
   if (user === null) {
     return (
@@ -141,11 +139,17 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map(blog =>
+      /*
         <Blog
           key={blog.id}
           blog={blog}
           handleLikeButtonClick={addLike}
           handleBlogDelete={deleteBlog}
+        />
+        */
+        <Blog
+          key={blog.id}
+          blog={blog}
         />
       )}
     </div>
