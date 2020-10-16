@@ -1,34 +1,40 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
+
+const BlogForm = ({ hideFormOnSubmit }) => {
+  const dispatch = useDispatch()
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   const handleTitleChange = (event) => {
-    setBlogTitle(event.target.value)
+    setTitle(event.target.value)
   }
   const handleAuthorChange = (event) => {
-    setBlogAuthor(event.target.value)
+    setAuthor(event.target.value)
   }
   const handleUrlChange = (event) => {
-    setBlogUrl(event.target.value)
+    setUrl(event.target.value)
   }
 
   const addBlog = (event) => {
     event.preventDefault()
+    try {
+      dispatch(createBlog({ title, author, url }))
+      hideFormOnSubmit()
+      dispatch(setNotification('success', `a new blog ${title} by ${author} added`))
 
-    createBlog({
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl
-    })
-
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      dispatch(setNotification('error', 'Error adding blog'))
+    }
   }
-
 
   return (
     <>
@@ -38,7 +44,7 @@ const BlogForm = ({ createBlog }) => {
           <input
             id='title'
             type="text"
-            value={blogTitle}
+            value={title}
             name="blogTitle"
             onChange={handleTitleChange}
           />
@@ -49,7 +55,7 @@ const BlogForm = ({ createBlog }) => {
           <input
             id='author'
             type="text"
-            value={blogAuthor}
+            value={author}
             name="blogAuthor"
             onChange={handleAuthorChange}
           />
@@ -57,9 +63,9 @@ const BlogForm = ({ createBlog }) => {
         <div>
         url:
           <input
-          id='url'
+            id='url'
             type="text"
-            value={blogUrl}
+            value={url}
             name="blogUrl"
             onChange={handleUrlChange}
           />
