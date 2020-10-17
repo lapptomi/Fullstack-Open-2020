@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const BlogsOfUser = ({ user }) => {
   if (!user) {
     return null
