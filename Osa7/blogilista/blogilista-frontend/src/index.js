@@ -7,10 +7,11 @@ import store from './store'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
+  <Router>
+    <Provider store={store}>
       <App />
-    </Router>
-  </Provider>,
+    </Provider>
+  </Router>
+  ,
   document.getElementById('root')
 )

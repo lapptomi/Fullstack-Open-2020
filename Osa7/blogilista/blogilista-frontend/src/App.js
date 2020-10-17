@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -10,9 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs,  } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
 import {
-  Switch, Route
+  Switch, Route, useRouteMatch
 } from 'react-router-dom'
 import UserList from './components/UserList'
+import BlogsOfUser from './components/BlogsOfUser'
+import axios from 'axios'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -24,10 +26,24 @@ const App = () => {
   }, [dispatch])
 
   const user = useSelector(state => state.user)
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    axios
+      .get('/api/users')
+      .then(response => setUsers(response.data))
+  }, [])
+
 
   const toggleVisibility = () => {
     blogRef.current.toggleVisibility()
   }
+
+  const match = useRouteMatch('/users/:id')
+  const userFound = match
+    ? users.find(user => user.id === match.params.id)
+    : null
+
 
   if (user === null) {
     return (
@@ -47,6 +63,9 @@ const App = () => {
         <LogoutButton />
       </p>
       <Switch>
+        <Route path={'/users/:id'}>
+          <BlogsOfUser user={userFound}/>
+        </Route>
         <Route path={'/users'}>
           <UserList />
         </Route>
