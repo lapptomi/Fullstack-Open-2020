@@ -37,7 +37,8 @@ const BlogForm = ({ hideFormOnSubmit }) => {
   }
 
   return (
-    <>
+    <div>
+      <h1>Create new</h1>
       <form onSubmit={addBlog}>
         <div>
         title:
@@ -72,7 +73,7 @@ const BlogForm = ({ hideFormOnSubmit }) => {
         </div>
         <button type="submit">create</button>
       </form>
-    </>
+    </div>
   )
 }
 

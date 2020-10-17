@@ -5,9 +5,14 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
+import LogoutButton from './components/LogoutButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs,  } from './reducers/blogReducer'
-import { initializeUser, userLogout } from './reducers/userReducer'
+import { initializeUser } from './reducers/userReducer'
+import {
+  Switch, Route
+} from 'react-router-dom'
+import UserList from './components/UserList'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -26,10 +31,10 @@ const App = () => {
 
   if (user === null) {
     return (
-      <>
+      <div>
         <Notification />
         <LoginForm />
-      </>
+      </div>
     )
   }
 
@@ -39,17 +44,22 @@ const App = () => {
       <h2>blogs</h2>
       <p>
         {user.name} logged in
-        <button onClick={() => dispatch(userLogout())}>
-          logout
-        </button>
+        <LogoutButton />
       </p>
-      <Togglable buttonLabel="Create new blog" ref={blogRef}>
-        <h1>Create new</h1>
-        <BlogForm hideFormOnSubmit={toggleVisibility} />
-      </Togglable>
-      <BlogList />
+      <Switch>
+        <Route path={'/users'}>
+          <UserList />
+        </Route>
+        <Route path={'/'}>
+          <Togglable buttonLabel="Create new blog" ref={blogRef}>
+            <BlogForm hideFormOnSubmit={toggleVisibility} />
+          </Togglable>
+          <BlogList />
+        </Route>
+      </Switch>
     </div>
   )
 }
+
 
 export default App

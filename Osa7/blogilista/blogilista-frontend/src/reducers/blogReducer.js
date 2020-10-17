@@ -38,7 +38,7 @@ export const initializeBlogs = () => {
 export const deleteBlog = (blog) => {
   const id = blog.id
   return async (dispatch) => {
-    await blogService.remove(blog.id)
+    await blogService.remove(id)
     dispatch({
       type: 'DELETE_BLOG',
       data: { id }
