@@ -5,7 +5,6 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
-import LogoutButton from './components/LogoutButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs,  } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
@@ -14,6 +13,7 @@ import UserList from './components/UserList'
 import BlogsOfUser from './components/BlogsOfUser'
 import axios from 'axios'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -61,12 +61,9 @@ const App = () => {
 
   return (
     <div>
+      <Menu />
       <Notification />
-      <h2>blogs</h2>
-      <p>
-        {user.name} logged in
-        <LogoutButton />
-      </p>
+      <h2>blog app</h2>
       <Switch>
         <Route path={'/users/:id'}>
           <BlogsOfUser user={userFound}/>
