@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/blogs/5f8ae1236a649782bce66286/comments
+content-type: application/json
+authorization: bearer ...
+
+
+{
+  "comment": "awesome article"
+}

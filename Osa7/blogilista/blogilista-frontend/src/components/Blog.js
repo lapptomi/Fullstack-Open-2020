@@ -28,7 +28,13 @@ const Blog = ({ blog, users }) => {
         {blog.likes} likes
         <button onClick={() => addLike(blog)}>like</button>
       </p>
-      added by {user.name}
+      <p>added by {user.name}</p>
+      <b>comments</b>
+      <ul>
+        {blog.comments.map((blog, i) =>
+          <li key={i}>{blog.comment}</li>
+        )}
+      </ul>
     </div>
   )}
 

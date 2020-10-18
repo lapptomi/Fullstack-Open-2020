@@ -5,7 +5,6 @@ import LogoutButton from './LogoutButton'
 
 
 const Menu = () => {
-
   const loggedUser = useSelector(state => state.user)
 
   const padding = {

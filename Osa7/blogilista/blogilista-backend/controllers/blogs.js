@@ -11,7 +11,41 @@ blogsRouter.get('/', async (request, response, next) => {
     blogs: 0
   })
   response.json(blogs.map(b => b.toJSON()))
-})
+});
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const body = request.body
+  const id = request.params.id
+
+  try {
+    jwt.verify(request.token, process.env.SECRET)
+  } catch (error) {
+    return response.status(401).send({
+      error: 'invalid token'
+    })
+  }
+
+  try {
+    const token = request.token
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+  
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ 
+        error: 'token missing or invalid' 
+      })
+    }
+
+    const blog = await Blog.findById(id)
+    blog.comments = blog.comments.concat(body)
+    
+    await blog.save()
+    response.json(blog.toJSON())
+  } catch (error) {
+    return response.status(400).json({ 
+      error: 'error adding comment' 
+    })
+  }
+});
 
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
@@ -61,7 +95,7 @@ blogsRouter.post('/', async (request, response, next) => {
   } catch (error) {
     next(error)
   }
-})
+});
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
@@ -77,7 +111,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   } catch (error) {
     next(error)
   }
-})
+});
 
 blogsRouter.put('/:id', async (request, response, next) => {    
   const body = request.body
@@ -100,6 +134,6 @@ blogsRouter.put('/:id', async (request, response, next) => {
   } catch (error) {
     next(error)
   }
-})
+});
 
 module.exports = blogsRouter
