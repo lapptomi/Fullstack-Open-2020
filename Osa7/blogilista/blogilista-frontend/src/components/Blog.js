@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addLikeTo } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
 
 const Blog = ({ blog, users }) => {
+  const [comment, setComment] = useState('')
   const dispatch = useDispatch()
   if (!blog) return null
   const user = users.find(user => user.id === blog.user.id)
@@ -20,6 +22,14 @@ const Blog = ({ blog, users }) => {
     }
   }
 
+  const handleCommentChange = (event) => {
+    setComment(event.target.value)
+  }
+
+  const addComment = () => {
+    blogService.addComment({ comment }, blog.id)
+  }
+
   return (
     <div >
       <h1>{blog.title} {blog.author}</h1>
@@ -29,6 +39,14 @@ const Blog = ({ blog, users }) => {
         <button onClick={() => addLike(blog)}>like</button>
       </p>
       <p>added by {user.name}</p>
+      <form onSubmit={addComment}>
+        <input
+          type="text"
+          value={comment}
+          onChange={handleCommentChange}
+        />
+        <button type="submit">add comment</button>
+      </form>
       <b>comments</b>
       <ul>
         {blog.comments.map((blog, i) =>
