@@ -3,7 +3,32 @@ import { useDispatch } from 'react-redux'
 import { userLogin } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import loginService from '../services/login'
+import styled from 'styled-components'
 
+
+
+const Title = styled.h2`
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+`
+const Button = styled.button`
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100px;
+`
+
+const Input = styled.input`
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+`
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -23,11 +48,11 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h2>Log in to application</h2>
+      <Title>Log in to application</Title>
       <form onSubmit={handleLogin}>
         <div>
         username
-          <input
+          <Input
             id='username'
             type="text"
             value={username}
@@ -37,7 +62,7 @@ const LoginForm = () => {
         </div>
         <div>
           password
-          <input
+          <Input
             id="password"
             type="password"
             value={password}
@@ -45,7 +70,7 @@ const LoginForm = () => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <Button type="submit">Login</Button>
       </form>
     </div>
   )

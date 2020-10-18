@@ -14,6 +14,14 @@ import BlogsOfUser from './components/BlogsOfUser'
 import axios from 'axios'
 import Blog from './components/Blog'
 import Menu from './components/Menu'
+import styled from 'styled-components'
+
+
+const StyledDiv = styled.div`
+  height: 100v;
+  min-height : 100vh;
+  background-color: lightgrey;
+`
 
 const App = () => {
   const dispatch = useDispatch()
@@ -60,7 +68,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <StyledDiv>
       <Menu />
       <Notification />
       <h2>blog app</h2>
@@ -81,7 +89,7 @@ const App = () => {
           <BlogList />
         </Route>
       </Switch>
-    </div>
+    </StyledDiv>
   )
 }
 

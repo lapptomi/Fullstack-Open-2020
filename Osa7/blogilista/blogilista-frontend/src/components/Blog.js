@@ -2,7 +2,28 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addLikeTo } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import styled from 'styled-components'
 
+const Button = styled.button`
+  background-color: #4CAF50;
+  margin-left: 5px;
+  color: white;
+  padding 4px;
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  border-left: 2px solid black;
+`
+
+const Comment = styled.p`
+  background-color: #399;
+  color: white;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  padding: 4px;
+  width: 150px;
+  font-family: Arial, Helvetica, sans-serif;
+`
 
 const Blog = ({ blog, users }) => {
   const [comment, setComment] = useState('')
@@ -36,7 +57,7 @@ const Blog = ({ blog, users }) => {
       <a href={`http://${blog.url}`}>{blog.url}</a>
       <p>
         {blog.likes} likes
-        <button onClick={() => addLike(blog)}>like</button>
+        <Button onClick={() => addLike(blog)}>like</Button>
       </p>
       <p>added by {user.name}</p>
       <form onSubmit={addComment}>
@@ -45,14 +66,12 @@ const Blog = ({ blog, users }) => {
           value={comment}
           onChange={handleCommentChange}
         />
-        <button type="submit">add comment</button>
+        <Button type="submit">add comment</Button>
       </form>
       <b>comments</b>
-      <ul>
-        {blog.comments.map((blog, i) =>
-          <li key={i}>{blog.comment}</li>
-        )}
-      </ul>
+      {blog.comments.map((blog, i) =>
+        <Comment key={i}>{blog.comment}</Comment>
+      )}
     </div>
   )}
 

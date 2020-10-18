@@ -1,5 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
 
+const Blog = styled.p`
+  padding: 10px;
+  border: outset;
+  borderWidth: 2;
+  width: 300px;
+  border-left: 6px solid darkgrey;
+  background-color: rgba(76, 175, 80, 0.20);;
+`
 
 const BlogsOfUser = ({ user }) => {
   if (!user) {
@@ -9,11 +18,9 @@ const BlogsOfUser = ({ user }) => {
     <div>
       <h1>{user.name}</h1>
       <b>added blogs</b>
-      <ul>
-        {user.blogs.map((blog, i) =>
-          <li key={i}>{blog.title}</li>
-        )}
-      </ul>
+      {user.blogs.map((blog, i) =>
+        <Blog key={i}>{blog.title}</Blog>
+      )}
     </div>
   )
 }

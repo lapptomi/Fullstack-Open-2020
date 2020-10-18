@@ -1,6 +1,18 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
+const StyledTable = styled.table`
+  border-collapse: collapse;
+  width: 100%;
+`
+
+const StyledTd = styled.th`
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+`
 
 const UserList = () => {
   const blogs = useSelector(state => state.blogs)
@@ -22,20 +34,20 @@ const UserList = () => {
   return (
     <div>
       <h1>Users</h1>
-      <table>
+      <StyledTable>
         <tbody>
           <tr>
             <th></th>
-            <th>blogs created</th>
+            <StyledTd>blogs created</StyledTd>
           </tr>
           {uniqueUsers.map((name, i) =>
             <tr key={i}>
-              <td><Link to={`/users/${getId(name)}`}>{name}</Link></td>
-              <td>{blogCount(name)}</td>
+              <StyledTd><Link to={`/users/${getId(name)}`}>{name}</Link></StyledTd>
+              <StyledTd>{blogCount(name)}</StyledTd>
             </tr>
           )}
         </tbody>
-      </table>
+      </StyledTable>
     </div>
   )
 }

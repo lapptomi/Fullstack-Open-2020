@@ -7,7 +7,7 @@ const LogoutButton = () => {
   return (
     <>
       <button onClick={() => dispatch(userLogout())}>
-          logout
+        logout
       </button>
     </>
   )
