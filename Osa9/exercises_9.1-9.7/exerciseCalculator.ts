@@ -14,6 +14,19 @@ interface Rating {
   description: string
 }
 
+const parseExerciseArguments = (args: Array<string>) => {
+  if (args.length < 4) throw new Error('Not enough arguments')
+
+  const target: number = Number(args[2])
+  const hours: Array<number> = args.slice(3).map(h => Number(h))
+
+  if (!isNaN(target) && !hours.includes(NaN)) {
+    return { hours, target }
+  } else {
+    throw new Error('Provided values were not numbers')
+  }
+}
+
 const calculateRating = (average: number, target: number): Rating => {
     if (average >= target) 
       return { rating: 3, description: 'you reached target value' } 
@@ -23,14 +36,15 @@ const calculateRating = (average: number, target: number): Rating => {
       return { rating: 2, description: 'not too bad but could be better' } 
 }
 
-const calculateExercises = (days: Array<number>, target: number): Result => {
+const calculateExercises = (hours: Array<number>, target: number): Result => {
 
-    const average = days.reduce((total, hours) => total + hours) / days.length
+    const average = hours.reduce((total, hours) => total + hours) / hours.length
     const ratingResult = calculateRating(average, target)
+    const trainingDays = hours.filter(h => h != 0)
 
     return {
-      periodLength: days.length,
-      trainingDays: days.filter(hours => hours <= 0).length,
+      periodLength: hours.length,
+      trainingDays: trainingDays.length,
       success: average >= target,
       rating: ratingResult.rating,
       ratingDescription: ratingResult.description,
@@ -39,4 +53,9 @@ const calculateExercises = (days: Array<number>, target: number): Result => {
     }
 }
 
-calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
+try {
+  const { hours, target } = parseExerciseArguments(process.argv)
+  console.log(calculateExercises(hours, target))
+} catch (e) {
+  console.log('Error, something bad happened, message: ', e.message)
+}
