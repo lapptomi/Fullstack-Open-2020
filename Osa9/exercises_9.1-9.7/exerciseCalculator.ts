@@ -40,7 +40,7 @@ const calculateExercises = (hours: Array<number>, target: number): Result => {
 
     const average = hours.reduce((total, hours) => total + hours) / hours.length
     const ratingResult = calculateRating(average, target)
-    const trainingDays = hours.filter(h => h != 0)
+    const trainingDays = hours.filter(h => h > 0)
 
     return {
       periodLength: hours.length,
