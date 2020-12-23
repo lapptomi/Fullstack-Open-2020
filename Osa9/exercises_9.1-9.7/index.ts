@@ -41,12 +41,16 @@ app.post('/exercises', (req, res) => {
 
 
 const errorHandler = (
-  _error: Error,
+  error: Error,
   _req: express.Request, 
   res: express.Response, 
   _next: NextFunction
 ) => {
-  return res.json({ error: 'malformatted parameters' });
+  if (error.name === 'SyntaxError') {
+    return res.json({ error: 'malformatted parameters' });
+  }
+  
+  return res.json({ error: 'error' });
 };
 
 app.use(errorHandler);
