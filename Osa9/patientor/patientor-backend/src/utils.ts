@@ -35,7 +35,7 @@ const parseDateOfBirth = (dateOfBirth: any): string => {
 
 const parseOccupation = (occupation: any): string => {
   if (!occupation || !isString(occupation)) {
-    throw new Error('Incorrent or missing dateOfBirth: ' + String(occupation));
+    throw new Error('Incorrect or missing occupation: ' + String(occupation));
   }
   return occupation;
 };
