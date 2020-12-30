@@ -5,3 +5,4 @@ README.md
 db.json
 *.rest
 .vscode
+.eslintcache
