@@ -1,15 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { CoursePart } from '../index';
 
-interface Part {
-  name: string;
-  exerciseCount: number;
-}
-
-const Total: React.FC<{ parts: Part[] }> = ({ parts }) => {
+const Total: React.FC<{ parts: CoursePart[] }> = ({ parts }) => {
   const total = parts.reduce((carry, part) => 
-    carry + part.exerciseCount, 0)
+    carry + part.exerciseCount, 0); 
   
-  return <p>Number of exercises {total}</p>
-}
+  return <p>Number of exercises {total}</p>;
+};
 
-export default Total
+export default Total;
