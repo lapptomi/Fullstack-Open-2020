@@ -28,7 +28,7 @@ interface CoursePartThree extends CoursePartDescription {
 }
 
 interface CoursePartFour extends CoursePartDescription {
-  name: "Random course part"
+  name: "Random course part";
   difficulty: string;
 }
 
