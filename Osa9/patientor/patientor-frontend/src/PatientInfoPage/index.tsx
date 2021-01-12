@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Container, Icon } from "semantic-ui-react";
-import { Patient } from "../types";
+import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { addFetchedPatient, useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,21 @@ const genderIcon = (gender: string) => {
     default:
       return <Icon name="neuter" />;
   }
+};
+
+
+
+const EntryInfo: React.FC<{ entry: Entry }> = ({ entry }) => {
+  return (
+    <div>
+      <p>{entry.date} {entry.description}</p>
+      <ul>
+        {entry.diagnosisCodes?.map((code, i) => 
+          <li key={i}>{code}</li>
+        )}
+      </ul>
+    </div>
+  );
 };
 
 const PatientInfoPage: React.FC = () => {
@@ -51,6 +66,10 @@ const PatientInfoPage: React.FC = () => {
         <h2>{patient.name} {genderIcon(patient.gender)}</h2>
         <p>ssn: {patient.ssn}</p>
         <p>occupation: {patient.occupation}</p>
+        <strong>entries</strong>
+          {patient.entries.map((entry, i) => 
+            <EntryInfo entry={entry} key={i} />
+          )}
       </Container>
     </div>
   );
