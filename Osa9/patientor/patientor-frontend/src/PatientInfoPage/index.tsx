@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { Container, Icon } from "semantic-ui-react";
-import { Patient, Entry } from "../types";
+import { Patient, Entry, Diagnosis } from "../types";
 import { apiBaseUrl } from "../constants";
-import { addFetchedPatient, useStateValue } from "../state";
+import { addFetchedPatient, setDiagnosisList, useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
 
 
@@ -18,7 +18,15 @@ const genderIcon = (gender: string) => {
   }
 };
 
-
+const DiagnosisInfo: React.FC<{ code: string }> = ({ code }) => {
+  const [{ diagnoses }, ] = useStateValue();
+  const diagnosis = diagnoses.find(d => d.code === code);
+  return (
+    <li>
+      {diagnosis?.code} {diagnosis?.name}
+    </li>
+  );
+};
 
 const EntryInfo: React.FC<{ entry: Entry }> = ({ entry }) => {
   return (
@@ -26,7 +34,7 @@ const EntryInfo: React.FC<{ entry: Entry }> = ({ entry }) => {
       <p>{entry.date} {entry.description}</p>
       <ul>
         {entry.diagnosisCodes?.map((code, i) => 
-          <li key={i}>{code}</li>
+          <DiagnosisInfo code={code} key={i} />
         )}
       </ul>
     </div>
@@ -52,7 +60,18 @@ const PatientInfoPage: React.FC = () => {
         console.error(e);
       }
     };
+    const fetchDiagnoses = async () => {
+      try {
+        const response = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnosis`
+        );
+        dispatch(setDiagnosisList(response.data));
+      } catch(e) {
+        console.error(e);
+      }
+    };
     fetchPatient();
+    fetchDiagnoses();
   }, [id, dispatch, state.fetchedPatients]);
   
   const patient = state.fetchedPatients[id];
