@@ -1,2 +1,5 @@
-Repositorio jossa tehtävät 3.1 - 3.11 sekä 3.13 - 3.22 tehty
-https://github.com/lapptomi/Puhelinluettelon-Backend
+# [Full Stack Open 2020](https://fullstackopen.com/)
+
+## This repository contains my answers for the Full Stack Open 2020 course
+
+### [About the course](https://fullstackopen.com/en/about)
