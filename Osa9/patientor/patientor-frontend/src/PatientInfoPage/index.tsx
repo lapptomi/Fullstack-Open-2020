@@ -1,10 +1,13 @@
 import React from "react";
 import axios from "axios";
-import { Container, Icon } from "semantic-ui-react";
+import { Container, Icon, Table } from "semantic-ui-react";
 import { Patient, Entry, Diagnosis } from "../types";
 import { apiBaseUrl } from "../constants";
 import { addFetchedPatient, setDiagnosisList, useStateValue } from "../state";
 import { useParams } from 'react-router-dom';
+import HospitalEntry from '../components/HospitalEntry';
+import OccupationalHealthcareEntry from '../components/OccupationalHealthcare';
+import HealthCheckEntry from '../components/HealthCheckEntry';
 
 
 const genderIcon = (gender: string) => {
@@ -18,27 +21,23 @@ const genderIcon = (gender: string) => {
   }
 };
 
-const DiagnosisInfo: React.FC<{ code: string }> = ({ code }) => {
-  const [{ diagnoses }, ] = useStateValue();
-  const diagnosis = diagnoses.find(d => d.code === code);
-  return (
-    <li>
-      {diagnosis?.code} {diagnosis?.name}
-    </li>
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
 };
 
-const EntryInfo: React.FC<{ entry: Entry }> = ({ entry }) => {
-  return (
-    <div>
-      <p>{entry.date} {entry.description}</p>
-      <ul>
-        {entry.diagnosisCodes?.map((code, i) => 
-          <DiagnosisInfo code={code} key={i} />
-        )}
-      </ul>
-    </div>
-  );
+const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+  switch(entry.type) {
+    case "Hospital":
+      return <HospitalEntry entry={entry} />;
+    case "OccupationalHealthcare":
+      return <OccupationalHealthcareEntry entry={entry} />;
+    case "HealthCheck":
+      return <HealthCheckEntry entry={entry} />;
+    default:
+      return assertNever(entry);
+  }
 };
 
 const PatientInfoPage: React.FC = () => {
@@ -86,10 +85,16 @@ const PatientInfoPage: React.FC = () => {
         <p>ssn: {patient.ssn}</p>
         <p>occupation: {patient.occupation}</p>
         <strong>entries</strong>
-          {patient.entries.map((entry, i) => 
-            <EntryInfo entry={entry} key={i} />
-          )}
       </Container>
+      <Table celled>
+        <Table.Body>
+          {patient.entries.map((entry, i) => (
+            <Table.Row key={i}>
+              <EntryDetails entry={entry} key={i}/>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   );
 };
