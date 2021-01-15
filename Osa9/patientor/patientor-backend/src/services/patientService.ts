@@ -7,12 +7,22 @@ const getPatients = (): Patient[] => {
   return patients;
 };
 
+const idGen = (len: number) => {
+  let id = '';
+  const charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < len; i++) {
+    id += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return id;
+};
+
 const addPatient = (patientToAdd: NewPatient): Patient => {
-  const randomNumber = String(Math.floor(Math.random() * 999999));
-  const randomId = "d2773598-f723-11e9-8f0b-362b9e"+randomNumber;
+  const randomID = (
+    `${idGen(8)}-${idGen(4)}-${idGen(4)}-${idGen(4)}-${idGen(12)}`
+  );
   
   const newPatient = {
-    id: randomId,
+    id: randomID,
     ...patientToAdd
   };
   
