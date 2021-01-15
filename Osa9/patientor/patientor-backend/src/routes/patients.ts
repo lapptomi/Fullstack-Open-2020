@@ -32,7 +32,7 @@ router.get('/:id', (req, res) => {
 router.post('/:id/entries', (req, res) => {
   try {
     const id = req.params.id;
-    const newEntry: NewEntry | undefined = toNewEntry(req.body);
+    const newEntry: NewEntry = toNewEntry(req.body);
     const addedEntry = entryService.addEntry(newEntry, id);
     res.json(addedEntry);
   } catch (e) {
