@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id/entries', (req, res) => {
   try {
-    const id = req.params.id;
+    const id: string = req.params.id;
     const newEntry: NewEntry = toNewEntry(req.body);
     const addedEntry = entryService.addEntry(newEntry, id);
     res.json(addedEntry);
