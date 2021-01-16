@@ -102,6 +102,7 @@ const PatientInfoPage: React.FC = () => {
   
   const patient = state.fetchedPatients[id];
 
+  
   if (!patient) {
     return <h2>Patient not found</h2>;
   }
