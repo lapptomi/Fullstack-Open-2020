@@ -35,11 +35,11 @@ const isDate = (date: any): string => {
   return date;
 };
 
-const parseDate = (dateOfBirth: any): string => {
-  if (!dateOfBirth || !isString(dateOfBirth || !isDate(dateOfBirth))) {
-    throw new Error('Incorrect or missing dateOfBirth: ' + String(dateOfBirth));
+const parseDate = (date: any): string => {
+  if (!date || !isString(date || !isDate(date))) {
+    throw new Error('Incorrect or missing date: ' + String(date));
   }
-  return String(dateOfBirth);
+  return String(date);
 };
 
 const parseOccupation = (occupation: any): string => {
@@ -106,11 +106,15 @@ const parseEmployerName = (name: any): string => {
   return name;
 };
 
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param);
+};
+
 const parseHealthRating = (rating: any): HealthCheckRating => {
-  if (!rating || rating != HealthCheckRating || isNaN(rating)) {
+  if (isNaN(rating) || !isHealthCheckRating(rating)) {
     throw new Error('Incorrect or missing health rating: ' + String(rating));
   }
-  return rating as HealthCheckRating;
+  return rating;
 };
 
 const parseSickLeave = ({ startDate, endDate }: any) => {
