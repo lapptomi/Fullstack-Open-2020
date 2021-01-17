@@ -8,15 +8,15 @@
 
 | Part | Status | 
 | :----:|:-----| 
-| 0 | ✅ | 
-| 1 | ✅ | 
-| 2 | ✅ |
-| 3 | ✅ | 
-| 4 | ✅ | 
-| 5 | ✅ | 
-| 6 | ✅ | 
-| 7 | ✅ | 
+| 0 | :heavy_check_mark: | 
+| 1 | :heavy_check_mark: | 
+| 2 | :heavy_check_mark: |
+| 3 | :heavy_check_mark: | 
+| 4 | :heavy_check_mark: | 
+| 5 | :heavy_check_mark: | 
+| 6 | :heavy_check_mark: | 
+| 7 | :heavy_check_mark: | 
 | 8 | ❌ | 
-| 9 | 🚧  | 
+| 9 | :heavy_check_mark: | 
 | 10 | ❌ | 
 | 11 | ❌ | 
