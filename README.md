@@ -6,17 +6,17 @@
 
 #### Parts done ####
 
-| Part | Status | 
-| :----:|:-----| 
-| 0 | :heavy_check_mark: | 
-| 1 | :heavy_check_mark: | 
-| 2 | :heavy_check_mark: |
-| 3 | :heavy_check_mark: | 
-| 4 | :heavy_check_mark: | 
-| 5 | :heavy_check_mark: | 
-| 6 | :heavy_check_mark: | 
-| 7 | :heavy_check_mark: | 
-| 8 | ❌ | 
-| 9 | :heavy_check_mark: | 
-| 10 | ❌ | 
-| 11 | ❌ | 
+| Part | Status | Topic 
+| :----:|:-----:|:----:|
+| 0 | :heavy_check_mark: | Fundamentals of Web apps |
+| 1 | :heavy_check_mark: | Introduction to React |
+| 2 | :heavy_check_mark: | Communicating with server |
+| 3 | :heavy_check_mark: | Programming a server with NodeJS and Express |
+| 4 | :heavy_check_mark: | Testing Express servers, user administration |
+| 5 | :heavy_check_mark: | Testing React apps |
+| 6 | :heavy_check_mark: | State management with Redux |
+| 7 | :heavy_check_mark: | React router, custom hooks, styling app with CSS and webpack |
+| 8 | ❌ | GraphQL |
+| 9 | :heavy_check_mark: | Typescript |
+| 10 | ❌ | React Native |
+| 11 | ❌ | CI/CD |
