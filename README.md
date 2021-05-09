@@ -19,4 +19,4 @@
 | 8 | ❌ | GraphQL |
 | 9 | :heavy_check_mark: | Typescript |
 | 10 | ❌ | React Native |
-| 11 | ❌ | CI/CD |
+| 11 | :heavy_check_mark: | CI/CD |
