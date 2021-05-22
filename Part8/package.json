@@ -1,0 +1,28 @@
+{
+  "name": "fullstack-open-2020",
+  "version": "1.0.0",
+  "description": "#### This repository contains my answers for the [Full Stack Open 2020](https://fullstackopen.com/en/) course ####",
+  "main": "index.js",
+  "scripts": {
+    "start": "node library-backend.js",
+    "dev": "nodemon library-backend.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lapptomi/Fullstack-Open-2020.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lapptomi/Fullstack-Open-2020/issues"
+  },
+  "homepage": "https://github.com/lapptomi/Fullstack-Open-2020#readme",
+  "dependencies": {
+    "apollo-server": "^2.24.1",
+    "graphql": "^15.5.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
