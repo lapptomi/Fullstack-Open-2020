@@ -4,7 +4,9 @@ import React from 'react'
 import { GET_ALL_BOOKS } from '../queries';
 
 const Books = (props) => {
-  const { loading, data } = useQuery(GET_ALL_BOOKS);
+  const { loading, data } = useQuery(GET_ALL_BOOKS, {
+    pollInterval: 2000
+  });
 
   if (!props.show) {
     return null

@@ -3,7 +3,9 @@ import React from 'react'
 import { GET_ALL_AUTHORS } from '../queries'
 
 const Authors = (props) => {
-  const { loading, data } = useQuery(GET_ALL_AUTHORS);
+  const { loading, data } = useQuery(GET_ALL_AUTHORS, {
+    pollInterval: 2000
+  });
   
   if (!props.show) {
     return null
