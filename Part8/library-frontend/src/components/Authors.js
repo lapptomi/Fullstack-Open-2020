@@ -1,12 +1,17 @@
-import { useQuery } from '@apollo/client'
-import React from 'react'
-import { GET_ALL_AUTHORS } from '../queries'
+import { useMutation, useQuery } from '@apollo/client'
+import React, { useState } from 'react'
+import { EDIT_BIRTHYEAR, GET_ALL_AUTHORS } from '../queries'
 
 const Authors = (props) => {
+  const [name, setName] = useState('')
+  const [born, setBorn]= useState('')
+
   const { loading, data } = useQuery(GET_ALL_AUTHORS, {
     pollInterval: 2000
-  });
+  })
   
+  const [changeBirthYear] = useMutation(EDIT_BIRTHYEAR)
+
   if (!props.show) {
     return null
   }
@@ -15,6 +20,14 @@ const Authors = (props) => {
   }
 
   const authors = data.allAuthors
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setName('')
+    setBorn('')
+    changeBirthYear({ variables: { name: name, setBornTo: Number(born) } })
+  }
 
   return (
     <div>
@@ -40,6 +53,25 @@ const Authors = (props) => {
         </tbody>
       </table>
 
+      <h1>Set birthyear</h1>
+        <form onSubmit={handleSubmit}>
+        <p>
+          name:
+          <input 
+            value={name} 
+            onChange={(event) => setName(event.target.value)}
+          />
+        </p>
+        <p>
+          born:
+          <input 
+            value={born} 
+            type="number"
+            onChange={(event) => setBorn(event.target.value)}
+          />
+        </p>
+        <button type="submit">update author</button>
+        </form>
     </div>
   )
 }
