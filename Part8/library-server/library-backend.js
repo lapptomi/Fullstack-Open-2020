@@ -1,5 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { v1: uuid } = require('uuid')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 
 const mongoose = require('mongoose')
 const Book = require('./models/book')
@@ -89,34 +88,44 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const author = await Author.findOne({ name: args.author })
+      try {
+        const author = await Author.findOne({ name: args.author })
+        const newBook = new Book({
+          title: args.title,
+          published: args.published,
+          genres: args.genres,
+        })
 
-      const newBook = new Book({
-        title: args.title,
-        published: args.published,
-        genres: args.genres,
-      })
-
-      if (!author) {
-        const newAuthor = new Author({ name: args.author })
-        const savedAuthor = await newAuthor.save()
+        if (!author) {
+          const newAuthor = new Author({ name: args.author })
+          const savedAuthor = await newAuthor.save()
+          newBook.author = savedAuthor._id
+        } else {
+          newBook.author = author._id
+        }
         
-        newBook.author = savedAuthor._id
-      } else {
-        newBook.author = author._id
+        await newBook.save()
+        return newBook
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
-      
-      await newBook.save()
-      return newBook
     },
     editAuthor: async (root, args) => {
-      const author = await Author.findOne({ name: args.name })
-      if (!author) {
-        return null
+      try {
+        const author = await Author.findOne({ name: args.name })
+        if (!author) {
+          return null
+        }
+        author.born = args.setBornTo
+        await author.save()
+        return author
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
-      author.born = args.setBornTo
-      await author.save()
-      return author
     }
   }
 }
