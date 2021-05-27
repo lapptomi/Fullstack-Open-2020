@@ -37,7 +37,10 @@ export const CREATE_NEW_BOOK = gql`
       id
       title
       published
-      author
+      author {
+        name
+        born
+      }
       genres
     }
   }
@@ -53,3 +56,14 @@ export const EDIT_BIRTHYEAR = gql`
     }
   }
 `
+
+export const LOG_IN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(
+      username: $username,
+      password: $password
+    ) {
+      value
+    }
+  }
+`;
