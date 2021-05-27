@@ -5,10 +5,10 @@ import { GET_ALL_BOOKS } from '../queries';
 
 const Books = (props) => {
   const { loading, data } = useQuery(GET_ALL_BOOKS, {
-    pollInterval: 2000
+    pollInterval: 5000
   });
 
-  if (!props.show) {
+  if (!props.show || !data) {
     return null
   }
   if (loading) {
@@ -35,7 +35,7 @@ const Books = (props) => {
           {books.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           )}

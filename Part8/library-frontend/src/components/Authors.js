@@ -8,12 +8,12 @@ const Authors = (props) => {
   const [born, setBorn]= useState('')
 
   const { loading, data } = useQuery(GET_ALL_AUTHORS, {
-    pollInterval: 2000
+    pollInterval: 5000
   })
-  
+
   const [changeBirthYear] = useMutation(EDIT_BIRTHYEAR)
 
-  if (!props.show) {
+  if (!props.show || !data) {
     return null
   }
   if (loading) {

@@ -109,7 +109,7 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {
       const authors = await Author.find({ name: root.name })
-      return authors
+      return authors.length
     }
   },
   Mutation: {
@@ -200,7 +200,9 @@ const server = new ApolloServer({
         auth.substring(7), JWT_SECRET
       )
       const currentUser = await User
-        .findById(decodedToken.id).populate('author')
+        .findById(decodedToken.id)
+        .populate('author')
+
       return { currentUser }
     }
   }
