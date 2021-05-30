@@ -39,7 +39,7 @@ const typeDefs = gql`
 
   type User {
     username: String!
-    favoriteGenre: String!
+    favoriteGenre: String
     id: ID!
   }
   
@@ -189,7 +189,9 @@ const resolvers = {
         id: user._id,
       }
   
-      return { value: jwt.sign(userForToken, JWT_SECRET) }
+      return { 
+        value: jwt.sign(userForToken, JWT_SECRET) 
+      }
     }
   }
 }
@@ -206,9 +208,7 @@ const server = new ApolloServer({
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
-      const currentUser = await User
-        .findById(decodedToken.id)
-        .populate('author')
+      const currentUser = await User.findById(decodedToken.id)
 
       return { currentUser }
     }
