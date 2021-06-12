@@ -12,7 +12,6 @@ const App = () => {
   const [token, setToken] = useState(null)
 
   const client = useApolloClient()
-
   const logout = () => {
     setToken(null)
     localStorage.clear()
