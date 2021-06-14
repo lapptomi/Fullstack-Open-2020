@@ -16,7 +16,7 @@
 | 5 | :heavy_check_mark: | Testing React apps |
 | 6 | :heavy_check_mark: | State management with Redux |
 | 7 | :heavy_check_mark: | React router, custom hooks, styling app with CSS and webpack |
-| 8 | ❌ | GraphQL |
+| 8 | :heavy_check_mark: | GraphQL |
 | 9 | :heavy_check_mark: | Typescript |
 | 10 | ❌ | React Native |
 | 11 | :heavy_check_mark: | CI/CD |
