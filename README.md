@@ -20,4 +20,4 @@
 | 9 | :heavy_check_mark: | Typescript |
 | 10 | ❌ | React Native |
 | 11 | :heavy_check_mark: | CI/CD |
-| 12 | ❌ | Containers |
+| 12 | :heavy_check_mark: | Containers |
