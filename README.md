@@ -18,6 +18,6 @@
 | 7 | :heavy_check_mark: | React router, custom hooks, styling app with CSS and webpack |
 | 8 | :heavy_check_mark: | GraphQL |
 | 9 | :heavy_check_mark: | Typescript |
-| 10 | ❌ | React Native |
+| 10 | :heavy_check_mark: | React Native |
 | 11 | :heavy_check_mark: | CI/CD |
 | 12 | :heavy_check_mark: | Containers |
