@@ -21,3 +21,4 @@
 | 10 | :heavy_check_mark: | React Native |
 | 11 | :heavy_check_mark: | CI/CD |
 | 12 | :heavy_check_mark: | Containers |
+| 13 | :heavy_check_mark: | Using relational databases  |
